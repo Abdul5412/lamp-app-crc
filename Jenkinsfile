@@ -21,7 +21,9 @@ pipeline {
                 sh '''
                     podman stop lamp-jenkins-container || true
                     podman rm lamp-jenkins-container || true
-                    podman run -d --name lamp-jenkins-container -p 8081:80 lamp-app-jenkins:latest
+                    podman run -d --name lamp-jenkins-container --restart=always -p 8081:80 lamp-app-jenkins:latest
+                    sleep 3
+                    podman ps | grep lamp-jenkins-container
                 '''
             }
         }
@@ -36,7 +38,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ LAMP App successfully deployed on CRC at port 8081!'
+            echo '✅ LAMP App successfully deployed!'
         }
         failure {
             echo '❌ Deployment fail ho gayi, logs check karo.'
