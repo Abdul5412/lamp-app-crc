@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo 'GitHub se code checkout ho raha hai...'
+            }
+        }
+
+        stage('Build Container Image') {
+            steps {
+                echo 'Podman se image build ho rahi hai...'
+                sh 'podman build -t lamp-app-jenkins:latest .'
+            }
+        }
+
+        stage('Deploy to CRC') {
+            steps {
+                echo 'CRC par deploy ho raha hai...'
+                sh '''
+                    podman stop lamp-jenkins-container || true
+                    podman rm lamp-jenkins-container || true
+                    podman run -d --name lamp-jenkins-container -p 8081:80 lamp-app-jenkins:latest
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo 'Deployment verify ho rahi hai...'
+                sh 'podman ps | grep lamp-jenkins-container'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ LAMP App successfully deployed on CRC at port 8081!'
+        }
+        failure {
+            echo '❌ Deployment fail ho gayi, logs check karo.'
+        }
+    }
+}
