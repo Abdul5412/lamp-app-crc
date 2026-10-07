@@ -11,7 +11,7 @@ pipeline {
         stage('Build Container Image') {
             steps {
                 echo 'Podman se image build ho rahi hai...'
-                sh 'podman build -t lamp-app-jenkins:latest .'
+                sh 'podman build --network=host -t lamp-app-jenkins:latest .'
             }
         }
 
