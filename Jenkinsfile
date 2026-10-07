@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -21,7 +22,7 @@ pipeline {
                 sh '''
                     podman stop lamp-jenkins-container || true
                     podman rm lamp-jenkins-container || true
-                    podman run -d --name lamp-jenkins-container --restart=always -p 8081:80 lamp-app-jenkins:latest
+                    podman run -d --replace --network=host --name lamp-jenkins-container --restart=always lamp-app-jenkins:latest
                     sleep 3
                     podman ps | grep lamp-jenkins-container
                 '''
@@ -45,3 +46,4 @@ pipeline {
         }
     }
 }
+```
