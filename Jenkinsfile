@@ -1,4 +1,3 @@
-```groovy
 pipeline {
     agent any
 
@@ -39,11 +38,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ LAMP App successfully deployed!'
+            echo 'LAMP App successfully deployed!'
         }
         failure {
-            echo '❌ Deployment fail ho gayi, logs check karo.'
+            echo 'Deployment fail ho gayi, logs check karo.'
         }
     }
 }
-```
